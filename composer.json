@@ -1,0 +1,23 @@
+{
+    "name": "gplcart/webhook",
+    "type": "gplcart-module",
+    "description": "Allows to inform external resources about various system events by sending HTTP POST payloads",
+    "keywords": ["gplcart", "ecommerce", "shopping cart", "gplcart-module", "gplcart-api"],
+    "homepage": "https://github.com/gplcart/webhook",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Iurii Makukh",
+            "email": "gplcart.software@gmail.com",
+            "role": "lead"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/gplcart/webhook/issues"
+    },
+    "require": {
+        "gplcart/composer-module-installer": "*"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
