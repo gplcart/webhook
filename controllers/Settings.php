@@ -118,7 +118,7 @@ class Settings extends BackendController
             $this->setError('url', $this->text('URL does not look valid'));
         }
 
-        return !$this->hasErrors('settings');
+        return !$this->hasErrors();
     }
 
     /**
