@@ -26,30 +26,6 @@ class WebHook extends Module
     }
 
     /**
-     * Module info
-     * @return array
-     */
-    public function info()
-    {
-        return array(
-            'name' => 'Web Hook',
-            'version' => '1.0.0-dev',
-            'description' => 'Allows to inform external resources about various system events by sending HTTP POST payloads',
-            'author' => 'Iurii Makukh <gplcart.software@gmail.com>',
-            'core' => '1.x',
-            'license' => 'GNU General Public License 3.0',
-            'configure' => 'admin/module/settings/webhook',
-            'settings' => array(
-                'hooks' => array(),
-                'url' => '',
-                'key' => '',
-                'salt' => '',
-                'sender' => ''
-            )
-        );
-    }
-
-    /**
      * Send via HTTP POST request
      * @param string $hook
      * @param array $arguments
