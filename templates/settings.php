@@ -13,7 +13,7 @@
       <div class="form-group required<?php echo $this->error('url', ' has-error'); ?>">
         <label class="col-md-2 control-label"><?php echo $this->text('Url'); ?></label>
         <div class="col-md-8">
-          <input name="settings[url]" class="form-control" maxlength="255" value="<?php echo $this->escape($settings['url']); ?>">
+          <input name="settings[url]" class="form-control" maxlength="255" value="<?php echo $this->e($settings['url']); ?>">
           <div class="help-block">
             <?php echo $this->error('url'); ?>
             <div class="text-muted">
@@ -25,7 +25,7 @@
       <div class="form-group required<?php echo $this->error('sender', ' has-error'); ?>">
         <label class="col-md-2 control-label"><?php echo $this->text('Sender'); ?></label>
         <div class="col-md-8">
-          <input name="settings[sender]" maxlength="255" class="form-control" value="<?php echo $this->escape($settings['sender']); ?>">
+          <input name="settings[sender]" maxlength="255" class="form-control" value="<?php echo $this->e($settings['sender']); ?>">
           <div class="help-block">
             <?php echo $this->error('sender'); ?>
             <div class="text-muted">
@@ -37,14 +37,14 @@
       <div class="form-group">
         <label class="col-md-2 control-label"><?php echo $this->text('Key'); ?></label>
         <div class="col-md-8">
-          <input name="settings[key]" maxlength="255" class="form-control" value="<?php echo $this->escape($settings['key']); ?>">
+          <input name="settings[key]" maxlength="255" class="form-control" value="<?php echo $this->e($settings['key']); ?>">
           <div class="help-block"><?php echo $this->text('An optional key to encrypt payload data. If not specified, plain JSON will be send'); ?></div>
         </div>
       </div>
       <div class="form-group<?php echo $this->error('salt', ' has-error'); ?>">
         <label class="col-md-2 control-label"><?php echo $this->text('Salt'); ?></label>
         <div class="col-md-8">
-          <input name="settings[salt]" maxlength="255" class="form-control" value="<?php echo $this->escape($settings['salt']); ?>">
+          <input name="settings[salt]" maxlength="255" class="form-control" value="<?php echo $this->e($settings['salt']); ?>">
           <div class="help-block">
             <?php echo $this->error('salt'); ?>
             <div class="text-muted">
@@ -64,7 +64,7 @@
           <?php foreach ($chunks as $hook => $name) { ?>
           <div class="checkbox">
             <label>
-              <input name="settings[hooks][]" value="<?php echo $this->escape($hook); ?>" type="checkbox"<?php echo in_array($hook, $settings['hooks']) ? ' checked' : ''; ?>> <?php echo $this->escape($name); ?>
+              <input name="settings[hooks][]" value="<?php echo $this->e($hook); ?>" type="checkbox"<?php echo in_array($hook, $settings['hooks']) ? ' checked' : ''; ?>> <?php echo $this->e($name); ?>
             </label>
           </div>
           <?php } ?>
