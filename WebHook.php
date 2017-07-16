@@ -59,7 +59,7 @@ class WebHook extends Module
         $payload = array(
             'encrypted' => false,
             'sender' => $settings['sender'],
-            'data' => json_encode(array('hook' => $hook, 'arguments' => $arguments))
+            'data' => gplcart_json_encode(array('hook' => $hook, 'arguments' => $arguments))
         );
 
         if ($settings['key'] !== '' && $settings['salt'] !== '') {
