@@ -45,7 +45,13 @@ class WebHook extends Module
         /* @var $curl \gplcart\core\helpers\Curl */
         $curl = $this->getInstance('gplcart\\core\\helpers\\Curl');
 
-        return $curl->post($settings['url'], array('fields' => $payload));
+        try {
+            $response = $curl->post($settings['url'], array('fields' => $payload));
+        } catch (\Exception $ex) {
+            return false;
+        }
+
+        return $response;
     }
 
     /**
@@ -73,12 +79,24 @@ class WebHook extends Module
     }
 
     /**
+     * Implements hook "module.install.before"
+     * @param string|bool $result
+     */
+    public function hookModuleInstallBefore(&$result)
+    {
+        if (!function_exists('curl_init')) {
+            $result = 'CURL library is not enabled';
+        }
+
+        $this->sendPayload(__FUNCTION__, func_get_args());
+    }
+
+    /**
      * Implements hook "route.list"
      * @param array $routes
      */
     public function hookRouteList(&$routes)
     {
-        // Module settings page
         $routes['admin/module/settings/webhook'] = array(
             'access' => 'module_edit',
             'handlers' => array(
@@ -1027,14 +1045,6 @@ class WebHook extends Module
      * Implements hook "module.disable.after"
      */
     public function hookModuleDisableAfter()
-    {
-        $this->sendPayload(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * Implements hook "module.install.before"
-     */
-    public function hookModuleInstallBefore()
     {
         $this->sendPayload(__FUNCTION__, func_get_args());
     }
