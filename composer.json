@@ -16,7 +16,8 @@
         "issues": "https://github.com/gplcart/webhook/issues"
     },
     "require": {
-        "gplcart/composer-module-installer": "*"
+        "gplcart/composer-module-installer": "*",
+        "ext-curl": "*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
