@@ -43,7 +43,7 @@ class WebHook extends Module
         $payload = $this->preparePayload($hook, $arguments, $settings);
 
         /* @var $curl \gplcart\core\helpers\Curl */
-        $curl = $this->getInstance('gplcart\\core\\helpers\\Curl');
+        $curl = $this->getHelper('Curl');
 
         try {
             $response = $curl->post($settings['url'], array('fields' => $payload));
