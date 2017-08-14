@@ -85,7 +85,7 @@ class WebHook extends Module
     public function hookModuleInstallBefore(&$result)
     {
         if (!function_exists('curl_init')) {
-            $result = 'CURL library is not enabled';
+            $result = $this->getLanguage()->text('CURL library is not enabled');
         }
 
         $this->sendPayload(__FUNCTION__, func_get_args());
