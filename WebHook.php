@@ -29,6 +29,7 @@ class WebHook extends Module
      * Send via HTTP POST request
      * @param string $hook
      * @param array $arguments
+     * @return mixed
      */
     protected function sendPayload($hook, array $arguments)
     {
@@ -59,6 +60,7 @@ class WebHook extends Module
      * @param string $hook
      * @param array $arguments
      * @param array $settings
+     * @return array
      */
     protected function preparePayload($hook, array $arguments, array $settings)
     {
@@ -84,11 +86,11 @@ class WebHook extends Module
      */
     public function hookModuleInstallBefore(&$result)
     {
-        if (!function_exists('curl_init')) {
+        if (function_exists('curl_init')) {
+            $this->sendPayload(__FUNCTION__, func_get_args());
+        } else {
             $result = $this->getLanguage()->text('CURL library is not enabled');
         }
-
-        $this->sendPayload(__FUNCTION__, func_get_args());
     }
 
     /**
