@@ -47,12 +47,10 @@ class WebHook extends Module
         $curl = $this->getHelper('Curl');
 
         try {
-            $response = $curl->post($settings['url'], array('fields' => $payload));
+            return $curl->post($settings['url'], array('fields' => $payload));
         } catch (\Exception $ex) {
             return false;
         }
-
-        return $response;
     }
 
     /**
