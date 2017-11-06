@@ -9,7 +9,8 @@
 
 namespace gplcart\modules\webhook;
 
-use gplcart\core\Module;
+use gplcart\core\Module,
+    gplcart\core\Config;
 
 /**
  * Main class for Web Hook module
@@ -18,11 +19,11 @@ class WebHook extends Module
 {
 
     /**
-     * Constructor
+     * @param Config $config
      */
-    public function __construct()
+    public function __construct(Config $config)
     {
-        parent::__construct();
+        parent::__construct($config);
     }
 
     /**
@@ -33,7 +34,7 @@ class WebHook extends Module
      */
     protected function sendPayload($hook, array $arguments)
     {
-        $settings = $this->config->module('webhook');
+        $settings = $this->config->getFromModule('webhook');
 
         if (!in_array($hook, $settings['hooks'])//
                 || empty($settings['url'])//

@@ -43,7 +43,7 @@ class Settings extends BackendController
         $this->setBreadcrumbEditSettings();
 
         $this->setData('hooks', $this->getHookNames());
-        $this->setData('settings', $this->config->module('webhook'));
+        $this->setData('settings', $this->config->getFromModule('webhook'));
 
         $this->submitSettings();
         $this->outputEditSettings();
