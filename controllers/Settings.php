@@ -9,7 +9,6 @@
 
 namespace gplcart\modules\webhook\controllers;
 
-use gplcart\core\models\Module as ModuleModel;
 use gplcart\core\controllers\backend\Controller as BackendController;
 
 /**
@@ -19,19 +18,11 @@ class Settings extends BackendController
 {
 
     /**
-     * Module model class instance
-     * @var \gplcart\core\models\Module $module
+     * Constructor
      */
-    protected $module;
-
-    /**
-     * @param ModuleModel $module
-     */
-    public function __construct(ModuleModel $module)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->module = $module;
     }
 
     /**
@@ -43,7 +34,7 @@ class Settings extends BackendController
         $this->setBreadcrumbEditSettings();
 
         $this->setData('hooks', $this->getHookNames());
-        $this->setData('settings', $this->config->getFromModule('webhook'));
+        $this->setData('settings', $this->module->getSettings('webhook'));
 
         $this->submitSettings();
         $this->outputEditSettings();
@@ -54,8 +45,7 @@ class Settings extends BackendController
      */
     protected function setTitleEditSettings()
     {
-        $vars = array('%name' => $this->text('Web Hook'));
-        $title = $this->text('Edit %name settings', $vars);
+        $title = $this->text('Edit %name settings', array('%name' => $this->text('Web Hook')));
         $this->setTitle($title);
     }
 
@@ -135,11 +125,11 @@ class Settings extends BackendController
      */
     protected function getHookNames()
     {
-        $class = $this->config->getModuleClassNamespace('webhook');
+        $class = $this->module->getClass('webhook');
         $excluded = array('hookRouteList');
 
         $list = array();
-        foreach ($this->config->getModuleHooks($class) as $hook) {
+        foreach ($this->module->getHooks($class) as $hook) {
             if (!in_array($hook, $excluded)) {
                 // Split capitalized parts
                 $parts = preg_split('/(?=[A-Z])/', $hook);

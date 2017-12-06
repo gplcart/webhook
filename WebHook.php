@@ -9,46 +9,54 @@
 
 namespace gplcart\modules\webhook;
 
-use gplcart\core\Module,
-    gplcart\core\Config;
+use gplcart\core\Module;
+use gplcart\core\helpers\Request as RequestHelper;
 
 /**
  * Main class for Web Hook module
  */
-class WebHook extends Module
+class WebHook
 {
 
     /**
-     * @param Config $config
+     * Module class instance
+     * @var \gplcart\core\Module $module
      */
-    public function __construct(Config $config)
+    protected $module;
+
+    /**
+     * Request helper class instance
+     * @var \gplcart\core\helpers\Request $request
+     */
+    protected $request;
+
+    /**
+     * @param Module $module
+     * @param RequestHelper $request
+     */
+    public function __construct(Module $module, RequestHelper $request)
     {
-        parent::__construct($config);
+        $this->module = $module;
+        $this->request = $request;
     }
 
     /**
      * Send via HTTP POST request
      * @param string $hook
      * @param array $arguments
-     * @return mixed
+     * @return bool|array
      */
     protected function sendPayload($hook, array $arguments)
     {
-        $settings = $this->config->getFromModule('webhook');
+        $settings = $this->module->getSettings('webhook');
 
-        if (!in_array($hook, $settings['hooks'])//
-                || empty($settings['url'])//
-                || empty($settings['sender'])) {
+        if (!in_array($hook, $settings['hooks']) || empty($settings['url']) || empty($settings['sender'])) {
             return false;
         }
 
-        $payload = $this->preparePayload($hook, $arguments, $settings);
-
-        /* @var $curl \gplcart\core\helpers\Curl */
-        $curl = $this->getHelper('Curl');
-
         try {
-            return $curl->post($settings['url'], array('fields' => $payload));
+            $payload = $this->preparePayload($hook, $arguments, $settings);
+            return $this->request->send($settings['url'], array('data' => $payload, 'method' => 'POST'));
         } catch (\Exception $ex) {
             return false;
         }
@@ -80,19 +88,6 @@ class WebHook extends Module
     }
 
     /**
-     * Implements hook "module.install.before"
-     * @param string|bool $result
-     */
-    public function hookModuleInstallBefore(&$result)
-    {
-        if (function_exists('curl_init')) {
-            $this->sendPayload(__FUNCTION__, func_get_args());
-        } else {
-            $result = $this->getLanguage()->text('CURL library is not enabled');
-        }
-    }
-
-    /**
      * Implements hook "route.list"
      * @param array $routes
      */
@@ -104,6 +99,14 @@ class WebHook extends Module
                 'controller' => array('gplcart\\modules\\webhook\\controllers\\Settings', 'editSettings')
             )
         );
+    }
+
+    /**
+     * Implements hook "module.install.before"
+     */
+    public function hookModuleInstallBefore()
+    {
+        $this->sendPayload(__FUNCTION__, func_get_args());
     }
 
     /**
