@@ -9,8 +9,8 @@
 
 namespace gplcart\modules\webhook;
 
-use gplcart\core\Module;
-use gplcart\core\helpers\Request as RequestHelper;
+use gplcart\core\Module,
+    gplcart\core\Container;
 
 /**
  * Main class for Web Hook module
@@ -25,19 +25,11 @@ class WebHook
     protected $module;
 
     /**
-     * Request helper class instance
-     * @var \gplcart\core\helpers\Request $request
-     */
-    protected $request;
-
-    /**
      * @param Module $module
-     * @param RequestHelper $request
      */
-    public function __construct(Module $module, RequestHelper $request)
+    public function __construct(Module $module)
     {
         $this->module = $module;
-        $this->request = $request;
     }
 
     /**
@@ -56,8 +48,9 @@ class WebHook
 
         try {
             $payload = $this->preparePayload($hook, $arguments, $settings);
-            return $this->request->send($settings['url'], array('data' => $payload, 'method' => 'POST'));
+            return $this->getSocketClient()->request($settings['url'], array('data' => $payload, 'method' => 'POST'));
         } catch (\Exception $ex) {
+            trigger_error('Failed to send payload');
             return false;
         }
     }
@@ -85,6 +78,15 @@ class WebHook
         }
 
         return $payload;
+    }
+
+    /**
+     * Returns socket client class instance
+     * @return \gplcart\core\helpers\SocketClient
+     */
+    protected function getSocketClient()
+    {
+        return Container::get('gplcart\\core\\helpers\\SocketClient');
     }
 
     /**
