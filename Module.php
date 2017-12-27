@@ -9,13 +9,13 @@
 
 namespace gplcart\modules\webhook;
 
-use gplcart\core\Module,
-    gplcart\core\Container;
+use gplcart\core\Container,
+    gplcart\core\Module as CoreModule;
 
 /**
  * Main class for Web Hook module
  */
-class WebHook
+class Module
 {
 
     /**
@@ -25,9 +25,9 @@ class WebHook
     protected $module;
 
     /**
-     * @param Module $module
+     * @param CoreModule $module
      */
-    public function __construct(Module $module)
+    public function __construct(CoreModule $module)
     {
         $this->module = $module;
     }
