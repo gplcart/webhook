@@ -9,6 +9,7 @@
 
 namespace gplcart\modules\webhook;
 
+use Exception;
 use gplcart\core\Module,
     gplcart\core\Container;
 
@@ -49,7 +50,7 @@ class Main
         try {
             $payload = $this->preparePayload($hook, $arguments, $settings);
             return $this->getSocketClient()->request($settings['url'], array('data' => $payload, 'method' => 'POST'));
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             trigger_error('Failed to send payload');
             return false;
         }
@@ -82,11 +83,11 @@ class Main
 
     /**
      * Returns socket client class instance
-     * @return \gplcart\core\helpers\SocketClient
+     * @return \gplcart\core\helpers\Socket
      */
     protected function getSocketClient()
     {
-        return Container::get('gplcart\\core\\helpers\\SocketClient');
+        return Container::get('gplcart\\core\\helpers\\Socket');
     }
 
     /**
@@ -105,10 +106,17 @@ class Main
 
     /**
      * Implements hook "module.install.before"
+     * @param null|string
      */
-    public function hookModuleInstallBefore()
+    public function hookModuleInstallBefore(&$result)
     {
-        $this->sendPayload(__FUNCTION__, func_get_args());
+        if (extension_loaded('openssl')) {
+            $this->sendPayload(__FUNCTION__, func_get_args());
+        } else {
+            /* @var $translation \gplcart\core\models\Translation */
+            $translation = gplcart_instance_model('Translation');
+            $result = $translation->text('OpenSSL extension is not enabled');
+        }
     }
 
     /**
