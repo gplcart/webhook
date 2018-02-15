@@ -10,8 +10,8 @@
 namespace gplcart\modules\webhook;
 
 use Exception;
-use gplcart\core\Module,
-    gplcart\core\Container;
+use gplcart\core\Container;
+use gplcart\core\Module;
 
 /**
  * Main class for Web Hook module
@@ -49,7 +49,7 @@ class Main
 
         try {
             $payload = $this->preparePayload($hook, $arguments, $settings);
-            return $this->getSocketClient()->request($settings['url'], array('data' => $payload, 'method' => 'POST'));
+            return $this->getHttpModel()->request($settings['url'], array('data' => $payload, 'method' => 'POST'));
         } catch (Exception $ex) {
             trigger_error('Failed to send payload');
             return false;
@@ -83,11 +83,13 @@ class Main
 
     /**
      * Returns socket client class instance
-     * @return \gplcart\core\helpers\Socket
+     * @return \gplcart\core\models\Http
      */
-    protected function getSocketClient()
+    protected function getHttpModel()
     {
-        return Container::get('gplcart\\core\\helpers\\Socket');
+        /** @var \gplcart\core\models\Http $instance */
+        $instance = Container::get('gplcart\\core\\models\\Http');
+        return $instance;
     }
 
     /**
