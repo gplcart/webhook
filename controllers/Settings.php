@@ -9,21 +9,13 @@
 
 namespace gplcart\modules\webhook\controllers;
 
-use gplcart\core\controllers\backend\Controller as BackendController;
+use gplcart\core\controllers\backend\Controller;
 
 /**
  * Handles incoming requests and outputs data related to Web Hook module
  */
-class Settings extends BackendController
+class Settings extends Controller
 {
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Route page callback to display the module settings page
@@ -129,6 +121,7 @@ class Settings extends BackendController
         $excluded = array('hookRouteList');
 
         $list = array();
+
         foreach ($this->module->getHooks($class) as $hook) {
             if (!in_array($hook, $excluded)) {
                 // Split capitalized parts
@@ -138,7 +131,6 @@ class Settings extends BackendController
             }
         }
 
-        // Split by columns
         return gplcart_array_split($list, 4);
     }
 

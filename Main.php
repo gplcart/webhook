@@ -39,21 +39,20 @@ class Main
      * @param array $arguments
      * @return bool|array
      */
-    protected function sendPayload($hook, array $arguments)
+    public function sendPayload($hook, array $arguments)
     {
         $settings = $this->module->getSettings('webhook');
 
-        if (!in_array($hook, $settings['hooks']) || empty($settings['url']) || empty($settings['sender'])) {
-            return false;
+        if (in_array($hook, $settings['hooks']) && !empty($settings['url']) && !empty($settings['sender'])) {
+            try {
+                $payload = $this->preparePayload($hook, $arguments, $settings);
+                return $this->getHttpModel()->request($settings['url'], array('data' => $payload, 'method' => 'POST'));
+            } catch (Exception $ex) {
+                return false;
+            }
         }
 
-        try {
-            $payload = $this->preparePayload($hook, $arguments, $settings);
-            return $this->getHttpModel()->request($settings['url'], array('data' => $payload, 'method' => 'POST'));
-        } catch (Exception $ex) {
-            trigger_error('Failed to send payload');
-            return false;
-        }
+        return false;
     }
 
     /**
@@ -108,17 +107,10 @@ class Main
 
     /**
      * Implements hook "module.install.before"
-     * @param null|string
      */
-    public function hookModuleInstallBefore(&$result)
+    public function hookModuleInstallBefore()
     {
-        if (extension_loaded('openssl')) {
-            $this->sendPayload(__FUNCTION__, func_get_args());
-        } else {
-            /* @var $translation \gplcart\core\models\Translation */
-            $translation = gplcart_instance_model('Translation');
-            $result = $translation->text('OpenSSL extension is not enabled');
-        }
+        $this->sendPayload(__FUNCTION__, func_get_args());
     }
 
     /**

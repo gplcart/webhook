@@ -1,16 +1,19 @@
 {
-    "name": "Web Hook",
-    "version": "1.0.0-dev",
-    "description": "Allows to inform external resources about various system events by sending HTTP POST payloads",
-    "author": "Iurii Makukh <gplcart.software@gmail.com>",
-    "core": "1.x",
-    "license": "GNU General Public License 3.0",
-    "configure": "admin/module/settings/webhook",
-    "settings": {
-        "hooks": [],
-        "url": "",
-        "key": "",
-        "salt": "",
-        "sender": ""
-    }
+  "name": "Web Hook",
+  "version": "1.0.0-dev",
+  "description": "Allows to inform external resources about various system events by sending HTTP POST payloads",
+  "author": "Iurii Makukh <gplcart.software@gmail.com>",
+  "core": "1.x",
+  "license": "GNU General Public License 3.0",
+  "configure": "admin/module/settings/webhook",
+  "settings": {
+    "hooks": [],
+    "url": "",
+    "key": "",
+    "salt": "",
+    "sender": ""
+  },
+  "extensions": [
+    "openssl"
+  ]
 }
